@@ -41,33 +41,50 @@ class WUAPI
     end
 
     def send_request(query_string)
-      JSON.parse(Net::HTTP.get(URI(query_string)), symbolize_names: true)
+      raw_request = Net::HTTP.get(URI(query_string))
+      JSON.parse(raw_request, symbolize_names: true)
     end
 
     def location_fix
-      send_request(create_query('autoip','geolookup'))[:location][:nearby_weather_stations]
+      query_string = create_query('autoip','geolookup')
+      full_json_oj = send_request(query_string)
+      full_json_oj[:location][:nearby_weather_stations]
     end
 
     def station_data_array(loc_fix)
       output = Array.new
-      loc_fix.each { |key, value| output << value[:station] }.flatten
+      loc_fix.each do |key, value|
+        output << value[:station]
+      end
       output.flatten
     end
 
     def station_names(loc_fix)
-      station_data_array(loc_fix).map { |hash| hash[:icao] ? hash[:icao] : hash[:id] }
+      station_data_array(loc_fix).map do |hash|
+        hash[:icao] ? hash[:icao] : hash[:id]
+      end
     end
 
     def query_strings(loc_fix)
-      station_names.map { |query_id| query_id.length > 5 ? create_query("pws:#{query_id}") : create_query(query_id) }
+      station_names.map do |query_id|
+        if query_id.length > 5
+          create_query("pws:#{query_id}")
+        else
+          create_query(query_id)
+        end
+      end
     end
 
     def blast(loc_fix)
-      query_strings.map { |html| send_request(html) }
+      query_strings.map do |html|
+        send_request(html)
+      end
     end
 
     def blast_to_file(file, loc_fix)
-      File.open(file,"w") { |f| f.write(blast.to_json) }
+      File.open(file,"w") do |f|
+        f.write(blast.to_json)
+      end
     end
 
   end
