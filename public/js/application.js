@@ -18,7 +18,7 @@ function initialize() {
       var lat = position.coords.latitude;
       var lng = position.coords.longitude;
       $.ajax({
-        url: "https://maps.google.com/mapfiles/kml/shapes/point.png",
+        url: "/data",
         type: "post",
         dataType: "json",
         data: {lat: lat, lng: lng},
@@ -42,14 +42,15 @@ function initialize() {
 }
 
 function setMarkers(map, locations) {
+  debugger
   var image = {
-    url: '/public/js/point.png',
-    size: new google.maps.Size(8,8),
+    url: 'https://cdn4.iconfinder.com/data/icons/8-bit/160/bit-38-16.png',
+    size: new google.maps.Size(16,8),
     origin: new google.maps.Point(0,0),
-    anchor: new google.maps.Point(4,4)
+    anchor: new google.maps.Point(16,8)
   };
   var shape = {
-      coords: [1, 1, 1, 8, 8, 8, 8 , 1],
+      coords: [1, 1, 1, 8, 8, 16, 16 , 1],
       type: 'poly'
   };
   for (var i = 0; i < locations.length; i++) {
