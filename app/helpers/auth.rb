@@ -1,6 +1,7 @@
 def parse_array(json_raw)
-  array = JSON.parse(json_raw)
-  array.map(&:to_i)
+  array = JSON.parse(json_raw).map(&:to_i)
+  min = array.min - 1
+  array.map do |num| num - min end
 end
 def format_db
   collection = []
