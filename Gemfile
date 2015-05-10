@@ -14,6 +14,7 @@ gem 'bcrypt-ruby'
 gem 'pry'
 
 gem 'rake'
+gem 'unirest'
 
 gem 'shotgun'
 
