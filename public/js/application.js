@@ -12,68 +12,75 @@ function initialize() {
     type: "post",
     dataType: "json",
     error: function (response){
-        alert('Woops! Something went wrong!');
+      response = JSON.parse(response);
+      debugger
+      alert('Woops! Something went wrong!');
     },
     success: function(response){
-      stationsDataLoop(response)
+      // response = JSON.parse(response);
+      hexCoords(response);
+      // stationsDataLoop(response);
     }
   });
 }
 
-function stationsData(stations,index){
+// function stationsData(stations,index){
+//   output = [];
+//   for ( i = 0 ; i < stations.length ; i++) {
+//     var station = stations[i];
+//     output.push({
+//       location: new google.maps.LatLng(station[1], station[2]),
+//       weight: station[3][index],
+//       radius: 200,
+//       opacity: .5
+//     });
+//   };
+//   return output;
+// };
+
+// var stationsDataLoop = function(stations) {
+//   setTimeout(function(){
+//     counter++;
+//     console.log(counter);
+//     stat = stationsData(stations,counter);
+//     var heatmap = new google.maps.visualization.HeatmapLayer({
+//       data: stat
+//     });
+//     heatmap.setMap(map);
+//     if (counter === 35) {
+//       counter = 0;
+//     };
+//   stationsDataLoop(stations);
+// }, 20)};
+
+function hexCoords(stations){
   output = [];
-  for ( i = 0 ; i < stations.length ; i++) {
+  debugger
+  for ( i = 0 ; i < stations.length ; i++ ) {
+    debugger
     var station = stations[i];
-    output.push({
-      location: new google.maps.LatLng(station[1], station[2]),
-      weight: station[3][index],
-      radius: 200,
-      opacity: .5
-    });
-    output
+    var one_hex = [];
+    for ( j = 0 ; j < station[1].length ; j++ ){
+      var station_pts = station[1];
+      new_latlng = new google.maps.LatLng(station_pts[j][0],station_pts[j][1]);
+      debugger
+      one_hex.push(new_latlng);
+    };
+    new_shape = new google.maps.Polygon({
+      paths: one_hex,
+      strokeColor:"#0000FF",
+      strokeOpacity:0.0,
+      strokeWeight:0.1,
+      fillColor:"#0000FF",
+      fillOpacity:0.1
+    })
+    debugger
+    output.push(new_shape);
   };
-  return output;
+  debugger
+  for ( i = 0 ; i < output.length ; i++ ) {
+    output[i].setMap(map);
+  };
 };
 
-var stationsDataLoop = function(stations) {
-  setTimeout(function(){
-    counter++;
-    console.log(counter);
-    stat = stationsData(stations,counter);
-    var heatmap = new google.maps.visualization.HeatmapLayer({
-      data: stat
-    });
-    heatmap.setMap(map);
-    if (counter === 35) {
-      counter = 0;
-    };
-  stationsDataLoop(stations);
-}, 20)};
-
 google.maps.event.addDomListener(window, 'load', initialize);
-
-
-// function setMarkers(map, stations) {
-//   var image = {
-//     url: 'https://cdn4.iconfinder.com/data/icons/8-bit/160/bit-38-16.png',
-//     size: new google.maps.Size(16,8),
-//     origin: new google.maps.Point(0,0),
-//     anchor: new google.maps.Point(16,8)
-//   };
-//   var shape = {
-//       coords: [1,1,1,8,8,16,16,1],
-//       type: 'poly'
-//   };
-//   for (var i = 0; i < stations.length; i++) {
-//     var station = stations[i];
-//     var myLatLng = new google.maps.LatLng(station[1], station[2]);
-//     var marker = new google.maps.Marker({
-//         position: myLatLng,
-//         map: map,
-//         icon: image,
-//         shape: shape,
-//         title: station[0],
-//         zIndex: i
-//     });
-//   }
-// }
