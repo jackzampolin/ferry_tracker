@@ -1,5 +1,3 @@
-require_relative 'WUHTTP.rb'
-
 class Hourly
   def initialize(weather_station_id)
     @raw_json = WUHTTP.send_request(weather_station_id).body['hourly_forecast']
@@ -32,8 +30,5 @@ class Hourly
   end
   def humidity
     pull_attr('humidity')
-  end
-  def to_json(arg,secondary)
-    pull_attr('arg',secondary).to_json
   end
 end

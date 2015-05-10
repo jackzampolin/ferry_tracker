@@ -1,61 +1,30 @@
 var map;
 function initialize() {
   var mapOptions = {
-    zoom: 15
+    center: { lat: 37.767662, lng: -122.444759 },
+    zoom: 13
   };
   map = new google.maps.Map(document.getElementById('map-canvas'),
       mapOptions);
-  // Try HTML5 geolocation
-  if(navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(function(position) {
-      var pos = new google.maps.LatLng(position.coords.latitude,
-                                       position.coords.longitude);
-      var infowindow = new google.maps.InfoWindow({
-        map: map,
-        position: pos,
-        content: 'Location found using HTML5.'
-      });
-      var lat = position.coords.latitude;
-      var lng = position.coords.longitude;
-      $.ajax({
-        url: "/data",
-        type: "post",
-        dataType: "json",
-        data: {lat: lat, lng: lng},
-        error: function(request){
-          alert("Uh Oh Something Went Wrong...")
-        },
-        success: function(response){
-          var stations = response
-          setMarkers(map, stations);
-        }
-      });
-      $.ajax({
-        url: "/data2",
-        type: 'post',
-        dataType: 'json',
-        data: {lat: lat, lng: lng},
-        error: function(request){
-          alert("Uh Oh Something Went Wrong...")
-        },
-        success: function(response){
-          debugger
-          var data = response
-        }
-      });
-      map.setCenter(pos);
-    }, function() {
-      handleNoGeolocation(true);
-    });
-  } else {
-    // Browser doesn't support Geolocation
-    handleNoGeolocation(false);
-  }
-
+  $.ajax({
+    url: "/stations",
+    type: "post",
+    dataType: "json",
+    error: function (xhr, textStatus, errorThrown) {
+        var test = $.parseJSON(xhr.responseText);
+        alert(test);
+    },
+    success: function(response){
+      stations = response;
+      debugger
+      setMarkers(map, stations);
+    }
+  });
 }
 
-function setMarkers(map, locations) {
-  debugger
+
+
+function setMarkers(map, stations) {
   var image = {
     url: 'https://cdn4.iconfinder.com/data/icons/8-bit/160/bit-38-16.png',
     size: new google.maps.Size(16,8),
@@ -63,11 +32,11 @@ function setMarkers(map, locations) {
     anchor: new google.maps.Point(16,8)
   };
   var shape = {
-      coords: [1, 1, 1, 8, 8, 16, 16 , 1],
+      coords: [1,1,1,8,8,16,16,1],
       type: 'poly'
   };
-  for (var i = 0; i < locations.length; i++) {
-    var station = locations[i];
+  for (var i = 0; i < stations.length; i++) {
+    var station = stations[i];
     var myLatLng = new google.maps.LatLng(station[1], station[2]);
     var marker = new google.maps.Marker({
         position: myLatLng,
@@ -78,23 +47,6 @@ function setMarkers(map, locations) {
         zIndex: i
     });
   }
-}
-
-function handleNoGeolocation(errorFlag) {
-  if (errorFlag) {
-    var content = 'Error: The Geolocation service failed.';
-  } else {
-    var content = 'Error: Your browser doesn\'t support geolocation.';
-  }
-
-  var options = {
-    map: map,
-    position: new google.maps.LatLng(60, 105),
-    content: content
-  };
-
-  var infowindow = new google.maps.InfoWindow(options);
-  map.setCenter(options.position);
 }
 
 google.maps.event.addDomListener(window, 'load', initialize);

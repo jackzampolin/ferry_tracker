@@ -1,25 +1,20 @@
+require 'pry'
 get '/' do
   erb :welcome
 end
 
-post '/data' do
+post '/stations' do
   if request.xhr?
-    @lat = params['lat']
-    @lng = params['lng']
-    @stations = Stations.new(@lat,@lng)
-    @stations.to_json
-  else
-    status 404
-    redirect '/'
-  end
-end
-
-post '/data2' do
-  if request.xhr?
-    @lat = params['lat']
-    @lng = params['lng']
-    @stations = Stations.new(@lat,@lng).set_hourly
-    @stations.to_json
+    collection = []
+    Station.all.each do |station|
+      collection << [station.name,station.lat,station.lng]
+    end
+    Forecast.all.each_with_index do |forecast, index|
+      collection[index] << parse_array(forecast.feelslike)
+    end
+    content_type :json
+    response = collection.to_json
+    response
   else
     status 404
     redirect '/'
