@@ -33,4 +33,7 @@ class Hourly
   def humidity
     pull_attr('humidity')
   end
+  def to_json(arg,secondary)
+    pull_attr('arg',secondary).to_json
+  end
 end

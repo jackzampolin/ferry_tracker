@@ -1,7 +1,7 @@
 var map;
 function initialize() {
   var mapOptions = {
-    zoom: 13
+    zoom: 15
   };
   map = new google.maps.Map(document.getElementById('map-canvas'),
       mapOptions);
@@ -28,6 +28,19 @@ function initialize() {
         success: function(response){
           var stations = response
           setMarkers(map, stations);
+        }
+      });
+      $.ajax({
+        url: "/data2",
+        type: 'post',
+        dataType: 'json',
+        data: {lat: lat, lng: lng},
+        error: function(request){
+          alert("Uh Oh Something Went Wrong...")
+        },
+        success: function(response){
+          debugger
+          var data = response
         }
       });
       map.setCenter(pos);

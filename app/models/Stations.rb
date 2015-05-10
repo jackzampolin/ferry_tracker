@@ -10,7 +10,11 @@ class Station
     @hourly = nil
   end
   def to_json
-    [@name,@lat.to_f,@lng.to_f]
+    if @hourly
+      {'lat' => @lat.to_f, 'lng' => @lng.to_f, 'hourly' => @hourly.feelslike.to_json }.to_json
+    else
+      [@name,@lat.to_f,@lng.to_f]
+    end
   end
 end
 
