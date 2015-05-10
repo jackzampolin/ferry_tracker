@@ -17,12 +17,37 @@ function initialize() {
       alert('Woops! Something went wrong!');
     },
     success: function(response){
-      // response = JSON.parse(response);
-      hexCoords(response);
-      // stationsDataLoop(response);
+      drawHexes(response);
     }
   });
 }
+
+function drawHexes(stations){
+  output = [];
+  for ( i = 0 ; i < stations.length ; i++ ) {
+    var station = stations[i];
+    var one_hex = [];
+    for ( j = 0 ; j < station[1].length ; j++ ){
+      var station_pts = station[1];
+      new_latlng = new google.maps.LatLng(station_pts[j][0],station_pts[j][1]);
+      one_hex.push(new_latlng);
+    };
+    new_shape = new google.maps.Polygon({
+      paths: one_hex,
+      strokeColor:"#0000FF",
+      strokeOpacity:0.0,
+      strokeWeight:0.1,
+      fillColor:"#0000FF",
+      fillOpacity:0.1
+    })
+    output.push(new_shape);
+  };
+  for ( i = 0 ; i < output.length ; i++ ) {
+    output[i].setMap(map);
+  };
+};
+
+google.maps.event.addDomListener(window, 'load', initialize);
 
 // function stationsData(stations,index){
 //   output = [];
@@ -52,35 +77,3 @@ function initialize() {
 //     };
 //   stationsDataLoop(stations);
 // }, 20)};
-
-function hexCoords(stations){
-  output = [];
-  debugger
-  for ( i = 0 ; i < stations.length ; i++ ) {
-    debugger
-    var station = stations[i];
-    var one_hex = [];
-    for ( j = 0 ; j < station[1].length ; j++ ){
-      var station_pts = station[1];
-      new_latlng = new google.maps.LatLng(station_pts[j][0],station_pts[j][1]);
-      debugger
-      one_hex.push(new_latlng);
-    };
-    new_shape = new google.maps.Polygon({
-      paths: one_hex,
-      strokeColor:"#0000FF",
-      strokeOpacity:0.0,
-      strokeWeight:0.1,
-      fillColor:"#0000FF",
-      fillOpacity:0.1
-    })
-    debugger
-    output.push(new_shape);
-  };
-  debugger
-  for ( i = 0 ; i < output.length ; i++ ) {
-    output[i].setMap(map);
-  };
-};
-
-google.maps.event.addDomListener(window, 'load', initialize);
