@@ -18,7 +18,7 @@ function initialize() {
       var lat = position.coords.latitude;
       var lng = position.coords.longitude;
       $.ajax({
-        url: "/data",
+        url: "https://maps.google.com/mapfiles/kml/shapes/point.png",
         type: "post",
         dataType: "json",
         data: {lat: lat, lng: lng},
@@ -43,7 +43,7 @@ function initialize() {
 
 function setMarkers(map, locations) {
   var image = {
-    url: '/app/views/point.png',
+    url: '/public/js/point.png',
     size: new google.maps.Size(8,8),
     origin: new google.maps.Point(0,0),
     anchor: new google.maps.Point(4,4)
