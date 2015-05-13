@@ -37,9 +37,9 @@ function drawHexes(stations){
       paths: one_hex,
       strokeColor: colors[station[2][counter]],
       strokeOpacity:0.0,
-      strokeWeight:0.1,
+      strokeWeight:0.4,
       fillColor: colors[station[2][counter]],
-      fillOpacity:0.05
+      fillOpacity:0.03
     })
     output.push(new_shape);
   };
@@ -56,6 +56,6 @@ var stationsDataLoop = function(stations) {
     console.log(counter);
     drawHexes(stations);
   stationsDataLoop(stations);
-}, 10)};
+}, 100)};
 
 google.maps.event.addDomListener(window, 'load', initialize);

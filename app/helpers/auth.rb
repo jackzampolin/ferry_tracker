@@ -1,4 +1,4 @@
-require 'cpalette'
+require_relative 'hex_colors.rb'
 
 def parse_array(json_raw)
   array = JSON.parse(json_raw).map(&:to_i)
@@ -19,7 +19,7 @@ end
 
 def color_hash(atr)
   temps = atr.flatten.uniq.sort
-  Hash[temps.zip(Cpalette.palette(temps.length, {:hex => true}))]
+  Hash[temps.zip(Hex.colors(temps.length).reverse)]
 end
 
 def format_db_poly
