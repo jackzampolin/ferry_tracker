@@ -1,5 +1,3 @@
-SF_POINTS.each do |latlng_arr|
-  Stations.set(latlng_arr[0],latlng_arr[1])
-end
-
+Station.delete_all
+Forecast.delete_all
 Stations.set_forecasts

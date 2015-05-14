@@ -1,0 +1,28 @@
+{
+  "name": "ferry_tracker",
+  "version": "0.0.0",
+  "homepage": "https://github.com/jackzampolin/ferry_tracker",
+  "authors": [
+    "jackzampolin <jack.zampolin@gmail.com>"
+  ],
+  "description": "things!",
+  "main": "public/js/application.js",
+  "keywords": [
+    "thing"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "~2.1.4",
+    "jQuery": "~2.1.4"
+  },
+  "devDependencies": {
+    "jquery": "~2.1.4"
+  }
+}
