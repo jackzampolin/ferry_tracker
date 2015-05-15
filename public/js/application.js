@@ -13,17 +13,24 @@ function initialize() {
   // Creating the map.
   map = new google.maps.Map(document.getElementById('map-canvas'),
       mapOptions);
+  setLayerButtons();
   // Grabbing the data and feeding it into my drawing funcitons.
+  drawData('feelslike');
+}
+
+// Grabs the data, feeds it into the other functions and then loops.
+function drawData(layer){
   $.ajax({
     url: "/stations",
     type: "post",
     dataType: "json",
+    data: {'layer': layer },
     success: function(response){
       setColorKey(response[response.length - 1]);
       stationsDataLoop(response);
     }
   });
-}
+};
 
 // Increment the counter after each setTimeout loop.
 function count(){
@@ -33,18 +40,42 @@ function count(){
   };
 };
 
+// Sets buttons to change visualization layer.
+function setLayerButtons(){
+  var options = ['feelslike','temp','dewpoint','wind_speed','wind_direction','humidity']
+  var optionsText = ['Feels Like','Temp','Dewpoint','Wind Speed','Wind Direction','Humidity']
+  var layerButtons = document.createElement('div');
+  layerButtons.id = 'layerButtons';
+  for ( i = 0; i < options.length; i++ ){
+    var buttonDiv = document.createElement('div');
+    buttonDiv.className = 'layerButton';
+    var button = document.createElement('a');
+    button.className = 'waves-effect waves-black btn-flat';
+    button.innerHTML = optionsText[i];
+    button.id = options[i];
+    buttonDiv.appendChild(button);
+    layerButtons.appendChild(buttonDiv);
+  };
+  map.controls[google.maps.ControlPosition.LEFT_CENTER].push(layerButtons);
+}
+
 // Set the color key on the right center of the map.
 function setColorKey(colorHash){
+  // Removing the scale if it exists.
+  var reset = document.getElementById('tempGradient')
+  if (!!reset){
+    reset.remove();
+  };
   // Initializing tempGradient to store created divs
   var tempGradient = document.createElement('div');
   tempGradient.id = 'tempGradient';
   for (var key in colorHash) {
     if (colorHash.hasOwnProperty(key)) {
       // creating each individual div with associated temp and color.
-      var colorDiv = document.createElement('div');
+      var colorDiv = document.createElement('a');
       colorDiv.style.backgroundColor = colorHash[key];
       colorDiv.innerHTML = key;
-      colorDiv.class = 'colorDiv';
+      colorDiv.className = 'waves-effect waves-light btn';
       tempGradient.insertBefore(colorDiv, tempGradient.childNodes[0]);
     };
   };
@@ -52,16 +83,30 @@ function setColorKey(colorHash){
   map.controls[google.maps.ControlPosition.RIGHT_CENTER].push(tempGradient)
 };
 
+function setTime(num){
+  var output
+  if (num < 1){
+    output = "12:00 AM Today";
+  } else if (num < 13){
+    output = num + ":00 AM Today";
+  } else if (num < 25){
+    output = (num - 12) + ":00 PM Today";
+  } else {
+    output = (num - 24) + ":00 AM Tomorrow";
+  };
+  return output
+};
+
 function setTimer(counter){
   // Sets the timer at the top of the screen to show which time is being displayed.
-  time = document.getElementById('time')
+  var time = document.getElementById('time')
   if (!!time === false) {
     time = document.createElement('div');
     time.id = 'time';
-    time.innerHTML = counter;
+    time.innerHTML = setTime(counter);
     map.controls[google.maps.ControlPosition.TOP_CENTER].push(time)
   } else {
-    time.innerHTML = counter
+    time.innerHTML = setTime(counter);
   };
 };
 
@@ -93,10 +138,16 @@ function drawHexes(stations){
 };
 
 var stationsDataLoop = function(stations) {
-  // redrawing the stations every 100ms with new colors and temps.
+  // redrawing the stations every 500ms with new colors and temps.
   setTimeout(function(){
     drawHexes(stations);
   stationsDataLoop(stations);
-}, 100)};
+}, 500)};
 
 google.maps.event.addDomListener(window, 'load', initialize);
+
+$(function(){
+  $('#map-canvas').on('click', 'div.layerButton', function(event){
+    drawData(event.target.id);
+  });
+});

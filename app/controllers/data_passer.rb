@@ -4,11 +4,10 @@ end
 
 post '/stations' do
   if request.xhr?
-    ControllerHelpers.map_data(:feelslike)
+    ControllerHelpers.map_data(params['layer'].to_sym)
   else
     status 404
     redirect '/'
   end
 end
-
 

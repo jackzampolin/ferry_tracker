@@ -14,7 +14,7 @@ class WUHTTP
 
     def sleep_time(num)
       return nil if num == 0
-      p "Waiting for API.  Another #{num} seconds before blast."
+      p "#{num} #{num} #{num} #{num} #{num} #{num} #{num} #{num} #{num} #{num} #{num} #{num}"
       sleep 1
       sleep_time(num-1)
     end

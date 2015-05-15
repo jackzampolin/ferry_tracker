@@ -1,16 +1,19 @@
-/* CSS declarations go here */
-
 html, body, #map-canvas {
-    height: 100%;
-    margin: 0;
-    padding: 0;
+  height: 100%;
+  margin: 0;
+  padding: 0;
 }
 
-.colorDiv {
-    height: 1em;
-    width: 1em;
+.waves-effect {
+  display: block;
+  border-radius: 5px;
 }
 
 #tempGradient {
+  padding: 1em;
+}
 
+#time {
+  padding: 1em;
+  font-size: 25px;
 }
