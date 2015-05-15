@@ -137,7 +137,7 @@ function drawHexes(stations){
   count();
 };
 
-var stationsDataLoop = function(stations) {
+function stationsDataLoop(stations) {
   // redrawing the stations every 500ms with new colors and temps.
   setTimeout(function(){
     drawHexes(stations);

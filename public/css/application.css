@@ -6,7 +6,7 @@ html, body, #map-canvas {
 
 .waves-effect {
   display: block;
-  border-radius: 5px;
+  border-radius: 4px;
 }
 
 #tempGradient {
